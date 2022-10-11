@@ -36,8 +36,6 @@ const App = () => {
 
   const handleAddFeedback = (newAnimeData) => {
     newAnimeData.mal_id = uuidv4()
-    console.log(animeData)
-    console.log(newAnimeData)
     setAnimeData([newAnimeData,...animeData])
   }
   return (

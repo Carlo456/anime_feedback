@@ -60,10 +60,13 @@ const FeedbackForm = ({ addFeedback }) => {
         score: animeScore,
         synopsis: animeSynopsis,
         episodes: animeChapters,
-        genres: animeGenres,
-        images: animeImage
+        genres: [...animeGenres],
+        images: {
+          jpg: {
+            image_url: animeImage
+          }
+        }
       };
-      
       addFeedback(animeInfo);
       setAnimeInformation({});
     }

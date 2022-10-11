@@ -5,7 +5,6 @@ import Card from './shared/Card'
 import { FaTimes } from 'react-icons/fa'
 
 const FeedbackItem = ({anime, handleDeleteFeedback}) => {
-    
     return (
         <Card>
             <div className="num-display">{anime.score}</div>
@@ -14,7 +13,7 @@ const FeedbackItem = ({anime, handleDeleteFeedback}) => {
             </button>
             <div className='grid-container'>
                 <div>
-                    <img src={anime.images.jpg.image_url} className='grid-image'/>
+                    <img src={anime.images.jpg.image_url} className='grid-image' alt='lol'/>
                 </div>
                 <div>
                     <h2>{anime.title}</h2>
