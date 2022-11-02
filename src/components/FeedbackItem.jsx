@@ -4,11 +4,18 @@ import Card from './shared/Card'
 //imports outside react
 import { FaTimes } from 'react-icons/fa'
 
-const FeedbackItem = ({anime, handleDeleteFeedback}) => {
+//hooks
+import { useContext } from 'react'
+
+//context
+import FeedbackContext from '../context/FeedbackContext'
+
+const FeedbackItem = ({anime}) => {
+    const {handleDeleteFeedback} = useContext(FeedbackContext)
     return (
         <Card>
             <div className="num-display">{anime.score}</div>
-            <button className="close" onClick={() => {handleDeleteFeedback(anime.mal_id)}}>
+            <button className="close" onClick={() => {handleDeleteFeedback(anime.mal_id, anime.images.jpg.image_url)}}>
                 <FaTimes color='purple'/>
             </button>
             <div className='grid-container'>

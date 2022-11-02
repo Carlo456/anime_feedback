@@ -1,7 +1,14 @@
 import React from 'react'
 
-const FeedbackStats = ({feedback}) => {
-    
+//hooks
+import { useContext } from 'react'
+
+//context
+import FeedbackContext from '../context/FeedbackContext'
+
+const FeedbackStats = () => {
+  const { animeData } = useContext(FeedbackContext)
+
     const handleAnimeScore = (animeData) => {
         const sumScore = animeData.reduce((scoreAccumulator, currentAnimeScore) => {
           return scoreAccumulator + currentAnimeScore.score
@@ -11,8 +18,8 @@ const FeedbackStats = ({feedback}) => {
     }  
   return (
     <div className='feedback-stats'>
-        <h4>{feedback.length} animes reviewed</h4>
-        <h4>Average score: {isNaN(handleAnimeScore(feedback)) ? 0 : handleAnimeScore(feedback)}</h4>
+        <h4>{animeData.length} animes reviewed</h4>
+        <h4>Average score: {isNaN(handleAnimeScore(animeData)) ? 0 : handleAnimeScore(animeData)}</h4>
     </div>
   )
 }

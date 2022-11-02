@@ -1,14 +1,18 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 //normal components
 //import RatingSelect from './RatingSelect'
+
+//context
+import FeedbackContext from "../context/FeedbackContext";
 
 //styled components
 import Card from "./shared/Card";
 import Button from "./shared/Button";
 
-const FeedbackForm = ({ addFeedback }) => {
+const FeedbackForm = () => {
   //form information state hooks
   const [animeName, setAnimeName] = useState("");
   const [animeScore, setAnimeScore] = useState(7.5);
@@ -17,10 +21,13 @@ const FeedbackForm = ({ addFeedback }) => {
   const [animeChapters, setAnimeChapters] = useState(12);
   const [animeImage, setAnimeImage] = useState("");
   const [animeInformation, setAnimeInformation] = useState({});
-
+  
   //buttons and validations forms states
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [message, setMessage] = useState("")
+
+  //get context
+  const {handleAddFeedback} = useContext(FeedbackContext)
 
   const handleChangeName = (e) => {
     if (animeName === "") {
@@ -51,23 +58,50 @@ const FeedbackForm = ({ addFeedback }) => {
     console.log(e.target.files[0])
     setAnimeImage(e.target.files[0]);
   };
-
+  //TODO: make function that recieves submited info and sanitizes it
+  const sanitizeFormData = (animeRawInfo) => {
+    animeRawInfo.mal_id = uuidv4();
+    animeRawInfo.score = parseInt(animeRawInfo.score);
+    animeRawInfo.genres = ["Fantasy","gore"]; 
+    if(!animeRawInfo.images.jpg.image_url){
+      animeRawInfo.images.jpg.image_url = 'https://i.imgur.com/hTvGkTg.jpeg'
+    } else {
+      animeRawInfo.images.jpg.image_url = URL.createObjectURL(animeRawInfo.images.jpg.image_url);
+    }
+    
+    const animeInfo = {
+      mal_id: animeRawInfo.mal_id,
+      title: animeName,
+      score: animeRawInfo.score,
+      synopsis: animeSynopsis,
+      episodes: animeChapters,
+      genres: animeGenres,
+      images: {
+        jpg: {
+          image_url: animeRawInfo.images.jpg.image_url 
+        }
+      }
+    }
+    return animeInfo
+  }
   const handleSubmitInformation = (e) => {
     e.preventDefault();
     if (animeName.trim().length > 10) {
       const animeInfo = {
+        mal_id: 123,
         title: animeName,
         score: animeScore,
         synopsis: animeSynopsis,
         episodes: animeChapters,
-        genres: [...animeGenres],
+        genres: animeGenres,
         images: {
           jpg: {
-            image_url: animeImage
+            image_url: animeImage 
           }
         }
       };
-      addFeedback(animeInfo);
+      sanitizeFormData(animeInfo);
+      handleAddFeedback(animeInfo);
       setAnimeInformation({});
     }
   };

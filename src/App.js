@@ -1,54 +1,44 @@
-import React from 'react'
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+//providers
+import { FeedbackProvider } from "./context/FeedbackContext";
+
+//pages
+import AboutPage from "./pages/AboutPage";
 
 //components
-import Header from './components/Header'
-import FeedbackList from './components/FeedbackList'
-import FeedbackStats from './components/FeedbackStats'
-import FeedbackForm from './components/FeedbackForm'
-
-//services
-import { getAnimeTop } from './services/getAnimeTop'
-import createCollectionsInIndexedDB from './services/animeDB'
-
-//hooks
-import { useState, useEffect } from "react"
+import Header from "./components/Header";
+import FeedbackList from "./components/FeedbackList";
+import FeedbackStats from "./components/FeedbackStats";
+import FeedbackForm from "./components/FeedbackForm";
+import AboutIconLink from "./components/AboutIconLink";
 
 const App = () => {
-
-
-  const [animeData, setAnimeData] = useState([])
   
-  useEffect(()=> {
-    createCollectionsInIndexedDB();
-    getAnimeTop().then((animes) => {
-      setAnimeData(animes)
-    })
-  },[]);
-
-  const handleDeleteFeedback = (id) => {
-    if(window.confirm('Are you sure you want to delete this anime from the list?')){
-      setAnimeData(animeData.filter((anime) => {
-        return anime.mal_id !== id 
-      }))
-    }
-  }
-
-  const handleAddFeedback = (newAnimeData) => {
-    newAnimeData.mal_id = uuidv4()
-    setAnimeData([newAnimeData,...animeData])
-  }
   return (
-    <>
-      <Header/>
-      <div className='container'>
-        <FeedbackForm addFeedback={handleAddFeedback}/>
-        <FeedbackStats feedback={animeData}/>
-        <FeedbackList feedback={animeData} handleDeleteFeedback={handleDeleteFeedback}/>
-      </div>
-    </>
-    
-  )
-}
+    <FeedbackProvider>
+      <Router>
+        <Header />
+        <AboutIconLink/>
+        <div className="container">
+          <Routes>
+          
+            <Route exact path="/" element={
+                <>
+                  <FeedbackForm/>
+                  <FeedbackStats/>
+                  <FeedbackList/>
+                </>
+              }
+            ></Route>
+            <Route path="/about" element={<AboutPage />}></Route>
+          </Routes>
+          
+        </div>
+      </Router>
+  </FeedbackProvider>  
+  );
+};
 
-export default App
+export default App;

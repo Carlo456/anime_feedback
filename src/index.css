@@ -246,6 +246,8 @@ input:focus {
 
 .grid-image {
   border-radius: 5px;
+  width: 15em;
+  height: 20em;
 }
 
 /*  synopsis text */
